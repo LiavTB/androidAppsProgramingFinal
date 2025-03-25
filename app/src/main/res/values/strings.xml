@@ -1,5 +1,6 @@
 <resources>
-    <string name="app_name">Travelog</string>
+<!--    OLDDDDDD-->
+<!--    <string name="app_name">Travelog</string>-->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -22,4 +23,62 @@
     <string name="image_view_item_transform_content_description">Represents an image view in the
         item
     </string>
+
+
+<!--  NEWWWWW  -->
+
+
+    <string name="app_name">Travelog</string>
+    <string name="email_hint">Email</string>
+    <string name="password_hint">Password</string>
+    <string name="login_button">Log in</string>
+    <string name="signup_button">Sign Up</string>
+
+
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login">Log In</string>
+    <string name="signup">Sign Up</string>
+
+    <string name="full_name">Full Name</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="already_have_account">Already have an account? Log In</string>
+
+    <string name="upload_photo">Upload Photo</string>
+    <string name="select_photo">Select Photo</string>
+    <string name="description">Description</string>
+    <string name="description_hint">Share your travel experience…</string>
+    <string name="tag_location">Tag Location</string>
+    <string name="search_location">Search for location</string>
+    <string name="publish">Publish</string>
+
+    <string name="create_trip">Create a Trip</string>
+    <string name="trip_name">Trip Name</string>
+    <string name="trip_name_hint">Enter trip name</string>
+    <string name="trip_destination">Destination</string>
+    <string name="trip_destination_hint">Enter destination</string>
+    <string name="trip_dates">Dates</string>
+    <string name="trip_dates_hint">Enter trip dates</string>
+    <string name="create_trip_button">Create Trip</string>
+
+    <string name="trip_posts">Trip Posts</string>
+    <string name="add_post">Add Post</string>
+    <string name="trip_start_date">Start Date</string>
+    <string name="trip_start_date_value">Will be set on creation</string>
+
+    <string name="edit_profile">Edit Profile</string>
+    <string name="my_trips">My Trips</string>
+
+
+    <string name="home">Home</string>
+    <string name="search">Search</string>
+
+
+
+
+
+
+
+
+
 </resources>

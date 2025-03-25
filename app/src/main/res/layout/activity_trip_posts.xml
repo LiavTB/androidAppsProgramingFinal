@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/PostPageContainer">
+
+    <TextView
+        style="@style/PostTitle"
+        android:text="@string/trip_posts"/>
+
+    <LinearLayout style="@style/PostCardContainer">
+        <TextView style="@style/PostLabel" android:text="@string/trip_name"/>
+        <TextView
+            android:id="@+id/tv_trip_name"
+            style="@style/PostLabel"/>
+    </LinearLayout>
+
+    <LinearLayout style="@style/PostCardContainer">
+        <TextView style="@style/PostLabel" android:text="@string/trip_destination"/>
+        <TextView
+            android:id="@+id/tv_trip_destination"
+            style="@style/PostLabel"/>
+    </LinearLayout>
+
+    <LinearLayout style="@style/PostCardContainer">
+        <TextView style="@style/PostLabel" android:text="@string/trip_dates"/>
+        <TextView
+            android:id="@+id/tv_trip_dates"
+            style="@style/PostLabel"/>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_add_post"
+        style="@style/PostButtonPrimary"
+        android:text="@string/add_post" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/posts_container">
+            <!-- TODO Dynamically added posts will go here -->
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

@@ -1,0 +1,147 @@
+<resources>
+
+    <style name="BaseBoxStyle">
+        <item name="android:layout_marginLeft">20dp</item>
+        <item name="android:layout_marginRight">20dp</item>
+        <item name="android:layout_marginBottom">5dp</item>
+    </style>
+
+
+    <style name="EditTextStyle" parent="BaseBoxStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">12dp</item>
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:background">@drawable/edittext_background</item>
+        <item name="android:textColorHint">@color/hintColor</item>
+        <item name="android:textColor">@color/textColor</item>
+    </style>
+
+
+
+    <style name="ButtonPrimary" parent="BaseBoxStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">20dp</item>
+        <item name="android:layout_marginRight">20dp</item>
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:backgroundTint">@color/buttonColor</item>
+        <item name="android:textColor">@color/buttonTextColor</item>
+    </style>
+
+    <style name="ButtonOutline" parent="BaseBoxStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/button_outline</item>
+        <item name="android:textColor">@color/buttonTextColor</item>
+    </style>
+
+    <style name="PostPageContainer">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:padding">16dp</item>
+        <item name="android:background">@color/backgroundColor</item>
+    </style>
+
+    <style name="PostTitle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
+        <item name="android:textColor">@color/textColor</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+    </style>
+
+    <style name="PostCardContainer">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:background">@drawable/card_background</item>
+        <item name="android:padding">12dp</item>
+        <item name="android:layout_marginTop">16dp</item>
+    </style>
+
+    <style name="PostLabel">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/textColor</item>
+    </style>
+
+    <style name="PostEditTextStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">12dp</item>
+        <item name="android:background">@drawable/edittext_background</item>
+        <item name="android:textColorHint">@color/hintColor</item>
+        <item name="android:textColor">@color/textColor</item>
+        <item name="android:minHeight">100dp</item>
+        <item name="android:gravity">top</item>
+    </style>
+
+    <style name="PostButtonPrimary">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:backgroundTint">@color/buttonPrimaryColor</item>
+        <item name="android:textColor">@color/buttonTextColor</item>
+    </style>
+
+    <style name="PostButtonOutline">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/button_outline</item>
+        <item name="android:textColor">@color/buttonTextColor</item>
+    </style>
+
+
+    <style name="ProfileImage">
+        <item name="android:layout_width">100dp</item>
+        <item name="android:layout_height">100dp</item>
+        <item name="android:src">@drawable/profile_placeholder</item>
+        <item name="android:scaleType">centerCrop</item>
+        <item name="android:background">@drawable/circle_background</item>
+    </style>
+
+    <style name="ProfileName">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
+        <item name="android:textColor">@color/textColor</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_marginTop">8dp</item>
+    </style>
+
+    <style name="ProfileGrid">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:columnCount">3</item>
+        <item name="android:layout_marginTop">16dp</item>
+    </style>
+
+
+<!--bottom nav bar-->
+    <style name="BottomNavButton">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">@color/buttonOutlineColor</item>
+        <item name="android:textColor">@color/textColor</item>
+    </style>
+
+    <style name="BottomNavAddButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:backgroundTint">@color/buttonPrimaryColor</item>
+        <item name="android:textColor">@color/buttonTextColor</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="BottomNavProfileImage">
+        <item name="android:layout_width">40dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:src">@drawable/profile_placeholder</item>
+        <item name="android:scaleType">centerCrop</item>
+        <item name="android:background">@drawable/circle_background</item>
+    </style>
+
+</resources>

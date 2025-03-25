@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/PostPageContainer">
+
+    <TextView
+        style="@style/PostTitle"
+        android:text="@string/create_trip"/>
+
+    <LinearLayout style="@style/PostCardContainer">
+        <TextView style="@style/PostLabel" android:text="@string/trip_name"/>
+        <EditText
+            android:id="@+id/et_trip_name"
+            style="@style/PostEditTextStyle"
+            android:hint="@string/trip_name_hint" />
+    </LinearLayout>
+
+    <LinearLayout style="@style/PostCardContainer">
+        <TextView style="@style/PostLabel" android:text="@string/trip_destination"/>
+        <AutoCompleteTextView
+            android:id="@+id/et_trip_destination"
+            style="@style/PostEditTextStyle"
+            android:hint="@string/trip_destination_hint"
+            android:completionThreshold="1" />
+    </LinearLayout>
+
+    <LinearLayout style="@style/PostCardContainer">
+        <TextView style="@style/PostLabel" android:text="@string/trip_start_date"/>
+        <TextView
+            android:id="@+id/tv_trip_start_date"
+            style="@style/PostLabel"
+            android:text="@string/trip_start_date_value" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_create_trip"
+        style="@style/PostButtonPrimary"
+        android:text="@string/create_trip_button" />
+</LinearLayout>
