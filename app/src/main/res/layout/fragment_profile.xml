@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <!-- Declare the ProfileViewModel variable -->
+        <variable
+            name="viewModel"
+            type="com.example.travelog.ui.profile.ProfileViewModel" />
+    </data>
+
+    <LinearLayout
+        style="@style/PostPageContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal">
+
+        <!-- Profile picture -->
+        <ImageView
+            android:id="@+id/iv_profile_picture"
+            style="@style/ProfileImage"
+            android:src="@{viewModel.profilePicture}" />
+
+        <!-- Profile name -->
+        <TextView
+            android:id="@+id/tv_profile_name"
+            style="@style/ProfileName"
+            android:text="@{viewModel.profileName}" />
+
+        <TextView
+            style="@style/PostLabel"
+            android:text="@string/my_trips" />
+
+        <GridLayout
+            android:id="@+id/gl_profile_trips"
+            style="@style/ProfileGrid"
+            android:columnCount="3" />
+
+        <!-- Edit Profile button -->
+        <Button
+            android:id="@+id/btn_edit_profile"
+            style="@style/PostButtonPrimary"
+            android:text="@string/edit_profile"
+            android:onClick="@{() -> viewModel.onEditProfileClicked()}" />
+
+        <!-- Logout button -->
+        <Button
+            android:id="@+id/btn_logout"
+            style="@style/PostButtonPrimary"
+            android:text="Logout"
+            android:onClick="@{() -> viewModel.onLogoutClicked()}" />
+
+    </LinearLayout>
+</layout>

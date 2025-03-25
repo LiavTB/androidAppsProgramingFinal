@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <!-- Declare the viewModel variable with its fully qualified type -->
+        <variable
+            name="viewModel"
+            type="com.example.travelog.ui.register.RegisterViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:background="@color/backgroundColor">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/profile_placeholder"
+            android:layout_gravity="center"
+            android:scaleType="centerCrop"
+            android:background="@drawable/circle_background" />
+
+        <!-- Two-way binding on the full name field -->
+        <EditText
+            android:id="@+id/full_name"
+            style="@style/EditTextStyle"
+            android:hint="@string/full_name"
+            android:text="@={viewModel.fullName}" />
+
+        <!-- Two-way binding on the email field -->
+        <EditText
+            android:id="@+id/email"
+            style="@style/EditTextStyle"
+            android:hint="@string/email"
+            android:text="@={viewModel.email}" />
+
+        <!-- Two-way binding on the password field -->
+        <EditText
+            android:id="@+id/password"
+            style="@style/EditTextStyle"
+            android:hint="@string/password"
+            android:inputType="textPassword"
+            android:text="@={viewModel.password}" />
+
+        <!-- Two-way binding on the confirm password field -->
+        <EditText
+            android:id="@+id/confirm_password"
+            style="@style/EditTextStyle"
+            android:hint="@string/confirm_password"
+            android:inputType="textPassword"
+            android:text="@={viewModel.confirmPassword}" />
+
+        <!-- Sign-up button -->
+        <Button
+            android:id="@+id/btn_signup"
+            style="@style/ButtonPrimary"
+            android:text="@string/signup" />
+
+        <!-- Login button to navigate back -->
+        <Button
+            android:id="@+id/btn_login"
+            style="@style/ButtonOutline"
+            android:text="@string/already_have_account" />
+
+        <!-- ProgressBar to display while registration is processing -->
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
+    </LinearLayout>
+</layout>

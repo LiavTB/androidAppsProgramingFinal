@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <!-- Declare the viewModel variable with the full package name -->
+        <variable
+            name="viewModel"
+            type="com.example.travelog.ui.login.LoginViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:background="@color/backgroundColor">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/profile_placeholder"
+            android:layout_gravity="center"
+            android:scaleType="centerCrop"
+            android:background="@drawable/circle_background" />
+
+        <!-- Bind the text attribute to the ViewModel's email LiveData -->
+        <EditText
+            android:id="@+id/email"
+            style="@style/EditTextStyle"
+            android:hint="@string/email"
+            android:text="@={viewModel.email}" />
+
+        <!-- Bind the text attribute to the ViewModel's password LiveData -->
+        <EditText
+            android:id="@+id/password"
+            style="@style/EditTextStyle"
+            android:hint="@string/password"
+            android:inputType="textPassword"
+            android:text="@={viewModel.password}" />
+
+        <!-- Use IDs that match those referenced in your Fragment -->
+        <Button
+            android:id="@+id/login_button"
+            style="@style/ButtonPrimary"
+            android:text="@string/login" />
+
+        <Button
+            android:id="@+id/register_link"
+            style="@style/ButtonOutline"
+            android:text="@string/signup" />
+
+        <!-- ProgressBar to display during loading -->
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
+    </LinearLayout>
+</layout>

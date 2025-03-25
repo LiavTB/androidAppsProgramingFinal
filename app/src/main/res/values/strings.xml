@@ -73,6 +73,12 @@
     <string name="home">Home</string>
     <string name="search">Search</string>
 
+<!--    menu strings-->
+    <string name="menu_create_post">Create Post</string>
+    <string name="menu_add_post">Add Post</string>
+    <string name="menu_profile">Profile</string>
+    <string name="menu_home">Home</string>
+    <string name="menu_search">Search</string>
 
 
 

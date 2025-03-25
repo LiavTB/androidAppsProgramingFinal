@@ -17,7 +17,7 @@
             android:exported="true"
             android:label="@string/app_name"
             android:resizeableActivity="true"
-            android:theme="@style/Theme.Travelog.NoActionBar"
+            android:theme="@style/Theme.Travelog"
             tools:targetApi="24">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
