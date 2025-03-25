@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <!-- Declare the ProfileEditViewModel variable -->
+        <variable
+            name="viewModel"
+            type="com.example.travelog.ui.profileEdit.ProfileEditViewModel" />
+    </data>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:background="@color/backgroundColor">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/profile_placeholder"
+            android:layout_gravity="center"
+            android:scaleType="centerCrop"
+            android:background="@drawable/circle_background" />
+
+        <!-- Two-way binding on the full name field -->
+        <EditText
+            android:id="@+id/full_name"
+            style="@style/EditTextStyle"
+            android:hint="@string/full_name"
+            android:text="@={viewModel.fullName}" />
+
+        <!-- Two-way binding on the email field -->
+        <EditText
+            android:id="@+id/email"
+            style="@style/EditTextStyle"
+            android:hint="@string/email"
+            android:text="@={viewModel.email}" />
+
+<!--        TODO - allow password edit-->
+<!--        <EditText-->
+<!--            android:id="@+id/password"-->
+<!--            style="@style/EditTextStyle"-->
+<!--            android:hint="@string/password"-->
+<!--            android:inputType="textPassword"-->
+<!--            android:text="@={viewModel.password}" />-->
+
+
+        <Button
+            android:id="@+id/btn_save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/save"
+            android:layout_marginTop="16dp" />
+
+        </LinearLayout>
+</layout>

@@ -30,8 +30,8 @@ class Profile : Fragment() {
         // Observe the event for editing the profile.
         viewModel.navigateToEditProfile.observe(viewLifecycleOwner, Observer { navigate ->
             if (navigate == true) {
-                // TODO - implement navigation to the Edit Profile screen.
-//                findNavController().navigate(R.id.action_profileFragment_to_editProfileFragment)
+
+                findNavController().navigate(R.id.action_profile_to_editProfile)
                 viewModel.onEditProfileNavigated()
             }
         })

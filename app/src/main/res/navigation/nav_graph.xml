@@ -11,6 +11,7 @@
 <!--        app:popUpToInclusive="false" />-->
     <!--        TODO - CHECK IT-->
 
+
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.travelog.ui.login.Login"
@@ -78,6 +79,18 @@
 <!--            app:destination="@id/addPostFragment"/>-->
 <!--    </fragment>-->
 
+
+
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="com.example.travelog.ui.profile.Profile"
+        android:label="Profile"
+        tools:layout="@layout/fragment_edit_profile">
+        <action
+            android:id="@+id/action_editProfile_to_profile"
+            app:destination="@id/profileFragment"/>
+    </fragment>
+
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.travelog.ui.profile.Profile"
@@ -86,6 +99,9 @@
         <action
             android:id="@+id/action_profile_to_login"
             app:destination="@id/loginFragment"/>
+        <action
+            android:id="@+id/action_profile_to_editProfile"
+            app:destination="@id/editProfileFragment"/>
 <!--        <action-->
 <!--            android:id="@+id/action_profile_to_home"-->
 <!--            app:destination="@id/homeFragment"/>-->

@@ -1,16 +1,19 @@
 package com.example.travelog.ui.register
 
+import android.app.Application
 import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.travelog.models.UserEntity
 import com.example.travelog.utils.Validator
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import com.example.travelog.dal.repositories.UserRepository
 
 // Sealed class representing various registration states.
 sealed class RegisterResult {
@@ -20,7 +23,7 @@ sealed class RegisterResult {
     data class Error(val exception: Exception?) : RegisterResult()
 }
 
-class RegisterViewModel : ViewModel() {
+class RegisterViewModel(application: Application) : AndroidViewModel(application) {
     // LiveData for user input
     val fullName = MutableLiveData("")
     val email = MutableLiveData("")
@@ -46,6 +49,9 @@ class RegisterViewModel : ViewModel() {
 
     // FirebaseAuth instance
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
+
+    private val userRepository: UserRepository =
+        UserRepository(application)
 
     // Initiates the registration process.
     fun register() {
@@ -77,6 +83,17 @@ class RegisterViewModel : ViewModel() {
                             .setDisplayName(fullName.value)
                             .build()
                     )?.await()
+
+                    // Create and save user in repository
+                    user?.let {
+                        val userEntity = UserEntity(
+                            userId = it.uid,
+                            fullName = fullName.value ?: "",
+                            email = email.value ?: "",
+                            profileImg = it.photoUrl?.toString() ?: ""
+                        )
+                        userRepository.addUser(userEntity)
+                    }
                 }
                 withContext(Dispatchers.Main) {
                     _registerState.value = RegisterResult.Success

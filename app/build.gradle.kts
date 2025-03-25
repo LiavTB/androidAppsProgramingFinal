@@ -1,8 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android) version "2.1.0"
+    alias(libs.plugins.kotlin.android) version "2.0.0"
     id("com.google.gms.google-services")
-
+    id("org.jetbrains.kotlin.kapt") version "2.0.0"
 }
 
 android {
@@ -54,6 +54,12 @@ dependencies {
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.firebase.auth.ktx)
     implementation(libs.androidx.databinding.runtime)
+    implementation(libs.androidx.room.common)
+    implementation(libs.androidx.room.ktx)
+    kapt(libs.androidx.room.compiler) // Room annotation processor
+
+    implementation(libs.firebase.firestore.ktx)
+    implementation(libs.firebase.storage.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
