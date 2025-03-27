@@ -83,8 +83,8 @@
 
     <fragment
         android:id="@+id/editProfileFragment"
-        android:name="com.example.travelog.ui.profile.Profile"
-        android:label="Profile"
+        android:name="com.example.travelog.ui.profileEdit.ProfileEdit"
+        android:label="EditProfile"
         tools:layout="@layout/fragment_edit_profile">
         <action
             android:id="@+id/action_editProfile_to_profile"

@@ -13,7 +13,7 @@ import com.example.travelog.R
 import com.example.travelog.databinding.FragmentEditProfileBinding
 import com.example.travelog.utils.Alert
 
-class ProfileEditFragment : Fragment() {
+class ProfileEdit : Fragment() {
 
     private val viewModel: ProfileEditViewModel by viewModels()
 

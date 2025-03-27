@@ -2,6 +2,7 @@ package com.example.travelog.ui.profileEdit
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.travelog.dal.repositories.UserRepository
@@ -21,7 +22,7 @@ class ProfileEditViewModel(application: Application) : AndroidViewModel(applicat
 
     // Two-way bound LiveData for the user's full name and profile image URL.
     val fullName = MutableLiveData("")
-    val profileImg = MutableLiveData("")
+    val profilePicture = MutableLiveData("")
     val email = MutableLiveData("")
 
     // LiveData to represent the update state (for progress, success, or error).
@@ -44,7 +45,7 @@ class ProfileEditViewModel(application: Application) : AndroidViewModel(applicat
                 val user: UserEntity? = userRepository.getUser(userId)
                 user?.let {
                     fullName.value = it.fullName
-                    profileImg.value = it.profileImg
+                    profilePicture.value = it.profileImg
                     email.value = it.email
                 }
             }
@@ -61,9 +62,9 @@ class ProfileEditViewModel(application: Application) : AndroidViewModel(applicat
                     val updatedUser = UserEntity(
                         userId = userId,
                         fullName = fullName.value ?: "",
-                        profileImg = profileImg.value ?: "",
+                        profileImg = profilePicture.value ?: "",
                         // Include other fields if needed (for example, email)
-                        email = ""  // Adjust as necessary
+                        email = email.value ?: ""
                     )
                     // Update the user in Firebase, local cache, and Firebase Auth.
                     userRepository.updateUser(updatedUser)
