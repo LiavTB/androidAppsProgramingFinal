@@ -1,7 +1,6 @@
 package com.example.travelog.dal.room
 
 
-import Converters
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
@@ -11,6 +10,7 @@ import com.example.travelog.dal.room.dao.ImageDao
 import com.example.travelog.dal.room.dao.PostDao
 import com.example.travelog.dal.room.dao.TripDao
 import com.example.travelog.dal.room.dao.UserDao
+import com.example.travelog.models.Converters
 import com.example.travelog.models.Image
 import com.example.travelog.models.UserEntity
 import com.example.travelog.models.TripEntity
