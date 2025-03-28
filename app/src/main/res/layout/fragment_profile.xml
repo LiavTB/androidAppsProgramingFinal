@@ -41,6 +41,12 @@
             android:text="@string/edit_profile"
             android:onClick="@{() -> viewModel.onEditProfileClicked()}" />
 
+        <Button
+            android:id="@+id/btn_add_trip"
+            style="@style/PostButtonPrimary"
+            android:text="Add Trip"
+            android:onClick="@{() -> viewModel.onAddTripClicked()}" />
+
         <!-- Logout button -->
         <Button
             android:id="@+id/btn_logout"

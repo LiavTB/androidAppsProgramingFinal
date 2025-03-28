@@ -1,38 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/PostPageContainer">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <!-- Declare the TripCreateViewModel variable -->
+        <variable
+            name="viewModel"
+            type="com.example.travelog.ui.tripCreate.TripCreateViewModel" />
+    </data>
 
-    <TextView
-        style="@style/PostTitle"
-        android:text="@string/create_trip"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            style="@style/PostPageContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="16dp">
 
-    <LinearLayout style="@style/PostCardContainer">
-        <TextView style="@style/PostLabel" android:text="@string/trip_name"/>
-        <EditText
-            android:id="@+id/et_trip_name"
-            style="@style/PostEditTextStyle"
-            android:hint="@string/trip_name_hint" />
-    </LinearLayout>
+            <TextView
+                style="@style/PostTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/create_trip"/>
 
-    <LinearLayout style="@style/PostCardContainer">
-        <TextView style="@style/PostLabel" android:text="@string/trip_destination"/>
-        <AutoCompleteTextView
-            android:id="@+id/et_trip_destination"
-            style="@style/PostEditTextStyle"
-            android:hint="@string/trip_destination_hint"
-            android:completionThreshold="1" />
-    </LinearLayout>
+            <LinearLayout
+                style="@style/PostCardContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="16dp">
+                <TextView
+                    style="@style/PostLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/trip_name"/>
+                <EditText
+                    android:id="@+id/et_trip_name"
+                    style="@style/PostEditTextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/trip_name_hint"
+                    android:text="@={viewModel.tripName}" />
+            </LinearLayout>
 
-    <LinearLayout style="@style/PostCardContainer">
-        <TextView style="@style/PostLabel" android:text="@string/trip_start_date"/>
-        <TextView
-            android:id="@+id/tv_trip_start_date"
-            style="@style/PostLabel"
-            android:text="@string/trip_start_date_value" />
-    </LinearLayout>
+            <LinearLayout
+                style="@style/PostCardContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="16dp">
+                <TextView
+                    style="@style/PostLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/trip_destination"/>
+                <AutoCompleteTextView
+                    android:id="@+id/et_trip_destination"
+                    style="@style/PostEditTextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/trip_destination_hint"
+                    android:completionThreshold="1"
+                    android:text="@={viewModel.tripDestination}" />
+            </LinearLayout>
 
-    <Button
-        android:id="@+id/btn_create_trip"
-        style="@style/PostButtonPrimary"
-        android:text="@string/create_trip_button" />
-</LinearLayout>
+            <LinearLayout
+                style="@style/PostCardContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="16dp">
+                <TextView
+                    style="@style/PostLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/trip_start_date"/>
+                <TextView
+                    android:id="@+id/tv_trip_start_date"
+                    style="@style/PostLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.tripStartDate}" />
+            </LinearLayout>
+
+
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="@{viewModel.isLoading ? android.view.View.VISIBLE : android.view.View.GONE}" />
+
+            <Button
+                android:id="@+id/btn_create_trip"
+                style="@style/PostButtonPrimary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/create_trip_button"
+                android:enabled="@{!viewModel.isLoading}"
+                android:layout_marginTop="24dp" />
+
+        </LinearLayout>
+    </ScrollView>
+</layout>

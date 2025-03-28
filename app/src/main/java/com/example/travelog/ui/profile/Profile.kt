@@ -45,6 +45,13 @@ class Profile : Fragment() {
             }
         })
 
+        viewModel.navigateToAddTrip.observe(viewLifecycleOwner, Observer { navigate ->
+            if (navigate == true) {
+                findNavController().navigate(R.id.action_profile_to_addTrip)
+                viewModel.onAddTripNavigated()
+            }
+        })
+
         return binding.root
     }
 }

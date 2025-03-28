@@ -9,4 +9,7 @@ data class UserEntity(
     val email: String,
     val fullName: String,
     val profileImg: String // URL to profile image
-)
+) {
+    // Secondary no-arg constructor for Room
+    constructor() : this("", "", "", "")
+}

@@ -34,4 +34,11 @@ class TripRepository(private val context: Context) {
         firestore.collection("trips").document(trip.id.toString()).delete().await()
         db.tripDao().deleteTrip(trip)
     }
+
+    suspend fun addTrip(trip: TripEntity) {
+        // Save to Firestore
+        firestore.collection("trips").document(trip.id.toString()).set(trip).await()
+        // Cache in local Room database
+        db.tripDao().insertTrip(trip)
+    }
 }

@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "posts")
 data class PostEntity(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    @PrimaryKey() val id: String = 0.toString(),
     val tripId: Int,     // Foreign key linked to TripEntity.id
     val userId: String,  // Foreign key linked to UserEntity.userId
     val photo: String,   // URL to externally hosted photo

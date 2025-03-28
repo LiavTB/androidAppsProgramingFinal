@@ -37,7 +37,6 @@ class ProfileEdit : Fragment() {
         viewModel.updateState.observe(viewLifecycleOwner, Observer { state ->
             when (state) {
                 is ProfileUpdateState.Loading -> {
-                    // Optionally show a progress indicator.
                 }
                 is ProfileUpdateState.Success -> {
                     // Optionally show a success message.

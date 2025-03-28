@@ -26,6 +26,8 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
     }
     val profileName: LiveData<String> get() = _fullName
 
+    private val _navigateToAddTrip = MutableLiveData<Boolean?>()
+
     private val userRepository: UserRepository =
         UserRepository(application)
 
@@ -79,5 +81,17 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
     // Called after logout navigation is handled.
     fun onLogoutHandled() {
         _logoutEvent.value = false
+    }
+
+
+    val navigateToAddTrip: LiveData<Boolean?>
+        get() = _navigateToAddTrip
+
+    fun onAddTripClicked() {
+        _navigateToAddTrip.value = true
+    }
+
+    fun onAddTripNavigated() {
+        _navigateToAddTrip.value = null
     }
 }

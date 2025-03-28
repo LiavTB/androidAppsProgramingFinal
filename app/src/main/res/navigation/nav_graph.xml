@@ -80,6 +80,25 @@
 <!--    </fragment>-->
 
 
+    <fragment
+        android:id="@+id/addTripFragment"
+        android:name="com.example.travelog.ui.tripCreate.TripCreate"
+        android:label="AddTrip"
+        tools:layout="@layout/fragment_trip_create">
+        <action
+            android:id="@+id/action_tripCreate_to_profile"
+            app:destination="@id/profileFragment"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/addPostFragment"
+        android:name="com.example.travelog.ui.post.PostCreate"
+        android:label="AddPost"
+        tools:layout="@layout/fragment_post_create">
+        <action
+            android:id="@+id/action_postCreate_to_profile"
+            app:destination="@id/profileFragment"/>
+    </fragment>
 
     <fragment
         android:id="@+id/editProfileFragment"
@@ -102,6 +121,9 @@
         <action
             android:id="@+id/action_profile_to_editProfile"
             app:destination="@id/editProfileFragment"/>
+        <action
+            android:id="@+id/action_profile_to_addTrip"
+            app:destination="@id/addTripFragment"/>
 <!--        <action-->
 <!--            android:id="@+id/action_profile_to_home"-->
 <!--            app:destination="@id/homeFragment"/>-->

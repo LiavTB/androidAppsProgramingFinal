@@ -14,7 +14,7 @@ import com.example.travelog.models.UserEntity
 import com.example.travelog.models.TripEntity
 import com.example.travelog.models.PostEntity
 
-@Database(entities = [UserEntity::class, TripEntity::class, PostEntity::class, Image::class], version = 1, exportSchema = false)
+@Database(entities = [UserEntity::class, TripEntity::class, PostEntity::class, Image::class], version = 3, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun tripDao(): TripDao

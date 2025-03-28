@@ -74,6 +74,7 @@
     <string name="search">Search</string>
 
     <string name="save">Save</string>
+    <string name="select_trip">Select Trip</string>
 
 <!--    menu strings-->
     <string name="menu_create_post">Create Post</string>

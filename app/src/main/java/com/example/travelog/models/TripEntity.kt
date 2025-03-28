@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "trips")
 data class TripEntity(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    @PrimaryKey() val id: String = 0.toString(),
     val userId: String,  // Foreign key linked to UserEntity.userId
     val name: String,
     val destination: String,
