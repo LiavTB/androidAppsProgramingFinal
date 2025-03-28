@@ -5,12 +5,16 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.travelog.dal.repositories.PostRepository
+import com.example.travelog.dal.repositories.TripRepository
 import com.example.travelog.dal.services.NominationApi
+import com.example.travelog.models.PostEntity
 import com.example.travelog.models.TripEntity
 import com.example.travelog.utils.Time
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.UUID
 
 // Sealed class representing the publish post state.
 sealed class PostPublishState {
@@ -46,6 +50,9 @@ class PostCreateViewModel(application: Application) : AndroidViewModel(applicati
     val isLoading = MutableLiveData<Boolean>()
 
     private val currentUserId: String? = FirebaseAuth.getInstance().currentUser?.uid
+
+    private val tripRepository: TripRepository = TripRepository(application)
+    private val postRepository: PostRepository = PostRepository(application)
 
     init {
         loadUserTrips()
@@ -86,16 +93,19 @@ class PostCreateViewModel(application: Application) : AndroidViewModel(applicati
     // Load user's trips.
     private fun loadUserTrips() {
         viewModelScope.launch {
-            delay(500) // Simulate network or repository delay.
-            // Dummy data; replace with real data from your TripRepository.
-            if (currentUserId == null) {
-                return@launch
+
+            tripRepository.getTripsByUserId(currentUserId ?: "").let { trips ->
+                userTrips.value = trips
             }
-            userTrips.value = listOf(
-                TripEntity("1", currentUserId, "Trip to Paris", "Paris", Time.getEpochTime()),
-                TripEntity("2", currentUserId, "Trip to Rome", "Rome", Time.getEpochTime()),
-                TripEntity("3", currentUserId,"Trip to Tokyo", "Tokyo", Time.getEpochTime())
-            )
+
+//            if (currentUserId == null) {
+//                return@launch
+//            }
+//            userTrips.value = listOf(
+//                TripEntity("1", currentUserId, "Trip to Paris", "Paris", Time.getEpochTime()),
+//                TripEntity("2", currentUserId, "Trip to Rome", "Rome", Time.getEpochTime()),
+//                TripEntity("3", currentUserId,"Trip to Tokyo", "Tokyo", Time.getEpochTime())
+//            )
         }
     }
 
@@ -123,7 +133,17 @@ class PostCreateViewModel(application: Application) : AndroidViewModel(applicati
             }
             publishState.value = PostPublishState.Loading
             viewModelScope.launch {
-                delay(1000) // Simulate a network/repository call.
+
+                val post = PostEntity(
+                    id = UUID.randomUUID().toString(),
+                    description = description.value!!,
+                    photo = selectedPhotoUri.value!!,
+                    locationTag = selectedLocationTags.value!!.toList(),
+                    tripId = selectedTrip.value!!.id,
+                    userId = currentUserId!!
+                )
+
+                postRepository.addPost(post)
                 publishState.value = PostPublishState.Success
             }
         } catch (e: Exception) {

@@ -34,4 +34,11 @@ class PostRepository(private val context: Context) {
         firestore.collection("posts").document(post.id.toString()).delete().await()
         db.postDao().deletePost(post)
     }
+
+    suspend fun addPost(post: PostEntity) {
+        // Save to Firestore
+        firestore.collection("posts").document(post.id.toString()).set(post).await()
+        // Cache in local Room database
+        db.postDao().insertPost(post)
+    }
 }

@@ -54,6 +54,7 @@ dependencies {
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.firebase.auth.ktx)
     implementation(libs.androidx.databinding.runtime)
+    implementation(libs.gson)
     implementation(libs.androidx.room.common)
     implementation(libs.androidx.room.ktx)
     kapt(libs.androidx.room.compiler) // Room annotation processor

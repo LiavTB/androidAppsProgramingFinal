@@ -41,4 +41,14 @@ class TripRepository(private val context: Context) {
         // Cache in local Room database
         db.tripDao().insertTrip(trip)
     }
+
+    suspend fun getTripsByUserId(userId: String): List<TripEntity> {
+        var trips = db.tripDao().getTripsByUserId(userId)
+        if (trips.isEmpty()) {
+            val snapshot = firestore.collection("trips").whereEqualTo("userId", userId).get().await()
+            trips = snapshot.toObjects(TripEntity::class.java)
+            trips.forEach { db.tripDao().insertTrip(it) }
+        }
+        return trips
+    }
 }

@@ -1,10 +1,12 @@
 package com.example.travelog.dal.room
 
 
+import Converters
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.example.travelog.dal.room.dao.ImageDao
 import com.example.travelog.dal.room.dao.PostDao
 import com.example.travelog.dal.room.dao.TripDao
@@ -14,7 +16,8 @@ import com.example.travelog.models.UserEntity
 import com.example.travelog.models.TripEntity
 import com.example.travelog.models.PostEntity
 
-@Database(entities = [UserEntity::class, TripEntity::class, PostEntity::class, Image::class], version = 3, exportSchema = false)
+@Database(entities = [UserEntity::class, TripEntity::class, PostEntity::class, Image::class], version = 4, exportSchema = false)
+@TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun tripDao(): TripDao

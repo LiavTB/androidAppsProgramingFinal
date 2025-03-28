@@ -24,4 +24,7 @@ interface TripDao {
 
     @Query("SELECT * FROM trips WHERE name LIKE :query OR destination LIKE :query")
     suspend fun searchTrips(query: String): List<TripEntity>
+
+    @Query("SELECT * FROM trips WHERE userId = :userId")
+    suspend fun getTripsByUserId(userId: String): List<TripEntity>
 }
