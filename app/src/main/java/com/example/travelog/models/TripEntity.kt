@@ -10,4 +10,7 @@ data class TripEntity(
     val name: String,
     val destination: String,
     val startDate: Long  // Timestamp (ms since epoch)
-)
+) {
+    // No-argument constructor for Firestore
+    constructor() : this("", "", "", "", 0)
+}

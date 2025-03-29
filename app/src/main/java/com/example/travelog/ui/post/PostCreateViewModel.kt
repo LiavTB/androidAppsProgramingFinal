@@ -38,7 +38,7 @@ class PostCreateViewModel(application: Application) : AndroidViewModel(applicati
     // List of user's trips and the selected trip.
 
     val userTrips = MutableLiveData<List<TripEntity>>(listOf())
-    val selectedTrip = MutableLiveData<TripEntity?>()
+    val selectedTrip = MutableLiveData<TripEntity?>(null)
     val selectedTripPosition = MutableLiveData<Int>(-1)
 
     // LiveData for the publishing state.
@@ -123,7 +123,8 @@ class PostCreateViewModel(application: Application) : AndroidViewModel(applicati
             isLoading.value = true
 
             if (description.value.isNullOrBlank() ||
-                selectedPhotoUri.value.isNullOrBlank() ||
+                // TODO  - return when setting the image implementation
+//                selectedPhotoUri.value.isNullOrBlank() ||
                 selectedLocationTags.value.isNullOrEmpty() ||
                 selectedTrip.value == null
             ) {
@@ -140,7 +141,8 @@ class PostCreateViewModel(application: Application) : AndroidViewModel(applicati
                     photo = selectedPhotoUri.value!!,
                     locationTag = selectedLocationTags.value!!.toList(),
                     tripId = selectedTrip.value!!.id,
-                    userId = currentUserId!!
+                    userId = currentUserId!!,
+                    date = Time.getEpochTime()
                 )
 
                 postRepository.addPost(post)
