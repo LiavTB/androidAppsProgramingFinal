@@ -1,20 +1,20 @@
 package com.example.travelog.ui.post
 
 import android.app.Application
+import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.travelog.dal.repositories.PostRepository
 import com.example.travelog.dal.repositories.TripRepository
-import com.example.travelog.dal.services.NominationApi
 import com.example.travelog.models.PostEntity
 import com.example.travelog.models.TripEntity
 import com.example.travelog.utils.Time
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.UUID
+import com.example.travelog.dal.repositories.ImageRepository  // New import for Cloudinary
+import com.example.travelog.dal.services.NominationApi
 
 // Sealed class representing the publish post state.
 sealed class PostPublishState {
@@ -36,7 +36,6 @@ class PostCreateViewModel(application: Application) : AndroidViewModel(applicati
     val locationSuggestions = MutableLiveData<List<String>>(listOf())
 
     // List of user's trips and the selected trip.
-
     val userTrips = MutableLiveData<List<TripEntity>>(listOf())
     val selectedTrip = MutableLiveData<TripEntity?>(null)
     val selectedTripPosition = MutableLiveData<Int>(-1)
@@ -63,16 +62,20 @@ class PostCreateViewModel(application: Application) : AndroidViewModel(applicati
         selectPhotoEvent.value = true
     }
 
-    // Called after a photo is selected.
-    fun onPhotoSelected(photoUri: String) {
-        selectedPhotoUri.value = photoUri
-        selectPhotoEvent.value = false
+    // --- Updated: Called after a photo is selected.
+    // Now accepts a Uri and uses the CloudinaryRepository to upload the image.
+    fun onPhotoSelected(imageUri: Uri) {
+        viewModelScope.launch {
+            val uploadedUrl = ImageRepository.uploadImage(getApplication(), imageUri)
+            if (uploadedUrl != null) {
+                selectedPhotoUri.value = uploadedUrl
+            }
+        }
     }
 
     // Fetch autocomplete suggestions from the Nominatim API.
     fun fetchLocationSuggestions(query: String) {
         viewModelScope.launch {
-
             locationSuggestions.value = NominationApi.autoCompleteName(query)
         }
     }
@@ -93,23 +96,13 @@ class PostCreateViewModel(application: Application) : AndroidViewModel(applicati
     // Load user's trips.
     private fun loadUserTrips() {
         viewModelScope.launch {
-
             tripRepository.getTripsByUserId(currentUserId ?: "").let { trips ->
                 userTrips.value = trips
             }
-
-//            if (currentUserId == null) {
-//                return@launch
-//            }
-//            userTrips.value = listOf(
-//                TripEntity("1", currentUserId, "Trip to Paris", "Paris", Time.getEpochTime()),
-//                TripEntity("2", currentUserId, "Trip to Rome", "Rome", Time.getEpochTime()),
-//                TripEntity("3", currentUserId,"Trip to Tokyo", "Tokyo", Time.getEpochTime())
-//            )
         }
     }
 
-    // Method called when a trip is selected in the spinner
+    // Method called when a trip is selected in the spinner.
     fun onTripSelected(position: Int) {
         if (position >= 0 && position < (userTrips.value?.size ?: 0)) {
             selectedTripPosition.value = position
@@ -123,13 +116,12 @@ class PostCreateViewModel(application: Application) : AndroidViewModel(applicati
             isLoading.value = true
 
             if (description.value.isNullOrBlank() ||
-                // TODO  - return when setting the image implementation
-//                selectedPhotoUri.value.isNullOrBlank() ||
+                selectedPhotoUri.value.isNullOrBlank() ||   // Now image is required
                 selectedLocationTags.value.isNullOrEmpty() ||
                 selectedTrip.value == null
             ) {
                 publishState.value =
-                    PostPublishState.Error("Please fill in all fields, add at least one location tag, and select a trip.")
+                    PostPublishState.Error("Please fill in all fields, add at least one location tag, select a photo, and select a trip.")
                 return
             }
             publishState.value = PostPublishState.Loading
@@ -150,8 +142,7 @@ class PostCreateViewModel(application: Application) : AndroidViewModel(applicati
             }
         } catch (e: Exception) {
             publishState.value = PostPublishState.Error(e.message)
-        }
-        finally {
+        } finally {
             isLoading.value = false
         }
     }

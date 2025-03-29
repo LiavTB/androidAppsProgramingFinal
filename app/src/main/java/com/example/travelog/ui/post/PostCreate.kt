@@ -1,6 +1,8 @@
-
 package com.example.travelog.ui.post
 
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -10,12 +12,10 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Spinner
-import androidx.core.view.children
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.travelog.R
@@ -26,6 +26,19 @@ import com.google.android.material.chip.Chip
 class PostCreate : Fragment() {
 
     private val viewModel: PostCreateViewModel by viewModels()
+
+    // --- Added: Image picker launcher to select a photo.
+    private val imagePickerLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val imageUri: Uri? = result.data?.data
+            imageUri?.let {
+                // Trigger the image upload in the ViewModel.
+                viewModel.onPhotoSelected(it)
+            }
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -103,7 +116,6 @@ class PostCreate : Fragment() {
             override fun onNothingSelected(parent: android.widget.AdapterView<*>?) {
                 viewModel.selectedTrip.value = null
             }
-
             override fun onItemSelected(
                 parent: android.widget.AdapterView<*>?,
                 view: View?,
@@ -117,33 +129,26 @@ class PostCreate : Fragment() {
             }
         })
 
-        // --- Photo selection observer ---
+        // --- Updated Photo selection observer ---
         viewModel.selectPhotoEvent.observe(viewLifecycleOwner, Observer { event ->
             if (event == true) {
-                // TODO: Launch image picker here; for now, simulate selection.
-                viewModel.onPhotoSelected("dummy_photo_uri")
+                // Launch the image picker intent to select a photo.
+                val intent = Intent(Intent.ACTION_PICK).apply { type = "image/*" }
+                imagePickerLauncher.launch(intent)
             }
         })
 
         // --- Publish state observer ---
         viewModel.publishState.observe(viewLifecycleOwner, Observer { state ->
             when (state) {
-                is PostPublishState.Loading -> {
-                }
-
+                is PostPublishState.Loading -> { }
                 is PostPublishState.Success -> {
                     Alert("Post", "Post published successfully", requireContext()).show()
                     findNavController().navigate(R.id.action_postCreate_to_profile)
                 }
-
                 is PostPublishState.Error -> {
-                    Alert(
-                        "Error",
-                        state.message ?: "An error occurred",
-                        requireContext()
-                    ).show()
+                    Alert("Error", state.message ?: "An error occurred", requireContext()).show()
                 }
-
                 else -> {}
             }
         })
@@ -151,4 +156,3 @@ class PostCreate : Fragment() {
         return binding.root
     }
 }
-
