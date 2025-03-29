@@ -14,7 +14,9 @@
         android:orientation="vertical"
         android:background="@color/backgroundColor">
 
+        <!-- Profile image view with an id for image selection -->
         <ImageView
+            android:id="@+id/profileImageView"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:src="@drawable/profile_placeholder"

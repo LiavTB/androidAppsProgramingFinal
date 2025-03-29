@@ -1,6 +1,7 @@
 package com.example.travelog.ui.register
 
 import android.app.Application
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -9,11 +10,13 @@ import androidx.lifecycle.viewModelScope
 import com.example.travelog.models.UserEntity
 import com.example.travelog.utils.Validator
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.UserProfileChangeRequest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import com.example.travelog.dal.repositories.UserRepository
+import com.example.travelog.dal.repositories.ImageRepository
 
 // Sealed class representing various registration states.
 sealed class RegisterResult {
@@ -53,6 +56,20 @@ class RegisterViewModel(application: Application) : AndroidViewModel(application
     private val userRepository: UserRepository =
         UserRepository(application)
 
+    // NEW: LiveData to hold the Cloudinary URL of the uploaded profile image.
+    val profileImageUrl = MutableLiveData<String?>()
+
+    /**
+     * Uploads the selected profile image to Cloudinary.
+     * This function is image‑related.
+     */
+    fun uploadProfileImage(imageUri: Uri) {
+        viewModelScope.launch {
+            val resultUrl = ImageRepository.uploadImage(getApplication(), imageUri)
+            profileImageUrl.value = resultUrl
+        }
+    }
+
     // Initiates the registration process.
     fun register() {
         validateForm()
@@ -67,30 +84,32 @@ class RegisterViewModel(application: Application) : AndroidViewModel(application
             return
         }
 
-        // Update state to Loading to show progress.
         _registerState.value = RegisterResult.Loading
 
-        // Launch a coroutine to handle Firebase registration.
         viewModelScope.launch {
             try {
                 withContext(Dispatchers.IO) {
-                    // Create user with email and password.
                     auth.createUserWithEmailAndPassword(email.value!!, password.value!!).await()
-                    // Optionally update the display name.
                     val user = auth.currentUser
+
+                    // Determine photoUri from the Cloudinary URL if available.
+                    val photoUri = profileImageUrl.value?.let { Uri.parse(it) }
+
+                    // Update the Firebase user profile with display name and photo URL.
                     user?.updateProfile(
-                        com.google.firebase.auth.UserProfileChangeRequest.Builder()
+                        UserProfileChangeRequest.Builder()
                             .setDisplayName(fullName.value)
+                            .setPhotoUri(photoUri)
                             .build()
                     )?.await()
 
-                    // Create and save user in repository
+                    // Create and save user in repository using the Cloudinary URL (if any)
                     user?.let {
                         val userEntity = UserEntity(
                             userId = it.uid,
                             fullName = fullName.value ?: "",
                             email = email.value ?: "",
-                            profileImg = it.photoUrl?.toString() ?: ""
+                            profileImg = photoUri?.toString() ?: ""
                         )
                         userRepository.addUser(userEntity)
                     }
@@ -112,7 +131,6 @@ class RegisterViewModel(application: Application) : AndroidViewModel(application
         isFullNameValid.value = !fullName.value.isNullOrBlank()
         isEmailValid.value = Validator.validateEmail(email.value ?: "")
         isPasswordValid.value = Validator.validatePassword(password.value ?: "")
-        // Confirm password must be non-empty and match the password.
         isConfirmPasswordValid.value = (confirmPassword.value == password.value && !confirmPassword.value.isNullOrBlank())
     }
 }

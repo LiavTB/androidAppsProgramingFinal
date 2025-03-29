@@ -4,7 +4,6 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.travelog.R
 import com.example.travelog.dal.repositories.UserRepository
@@ -14,16 +13,13 @@ import kotlinx.coroutines.launch
 
 class ProfileViewModel(application: Application) : AndroidViewModel(application) {
 
-    // LiveData for the profile picture (here using a drawable resource ID).
-    private val _profilePicture = MutableLiveData<Int>().apply {
-        value = R.drawable.profile_placeholder
-    }
-    val profilePicture: LiveData<Int> get() = _profilePicture
+    // LiveData for the profile picture URL.
+    // If no URL is available, the binding adapter will fall back to the placeholder.
+    private val _profilePicture = MutableLiveData<String>().apply { value = "" }
+    val profilePicture: LiveData<String> get() = _profilePicture
 
     // LiveData for the profile name.
-    private val _fullName = MutableLiveData<String>().apply {
-        value = "Your Name"
-    }
+    private val _fullName = MutableLiveData<String>().apply { value = "Your Name" }
     val profileName: LiveData<String> get() = _fullName
 
     private val _navigateToAddTrip = MutableLiveData<Boolean?>()
@@ -37,20 +33,21 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
         loadUser()
     }
 
-    // Load user data from the local repository (or Firebase if not cached).
+    // Load user data from the repository.
     private fun loadUser() {
         currentUserId?.let { userId ->
             viewModelScope.launch {
                 val user: UserEntity? = userRepository.getUser(userId)
                 user?.let {
                     _fullName.value = it.fullName
-                    //TODO - implement the image loading
-                    //_profilePicture.value = it.profileImg
+                    // If a profile image URL exists, update _profilePicture.
+                    if (!it.profileImg.isNullOrBlank()) {
+                        _profilePicture.value = it.profileImg
+                    }
                 }
             }
         }
     }
-
 
     // LiveData event for navigating to the Edit Profile screen.
     private val _navigateToEditProfile = MutableLiveData<Boolean>()
@@ -72,9 +69,7 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
 
     // Called when the Logout button is clicked.
     fun onLogoutClicked() {
-        // Sign out from Firebase. This clears the current user.
         FirebaseAuth.getInstance().signOut()
-        // Trigger logout event to let the fragment know to navigate away.
         _logoutEvent.value = true
     }
 
@@ -82,7 +77,6 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
     fun onLogoutHandled() {
         _logoutEvent.value = false
     }
-
 
     val navigateToAddTrip: LiveData<Boolean?>
         get() = _navigateToAddTrip

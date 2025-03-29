@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android) version "2.0.0"
@@ -15,6 +17,23 @@ android {
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
+
+        // Load properties from local.properties
+        val localProperties = Properties()
+        val localPropertiesFile = rootProject.file("local.properties")
+        if (localPropertiesFile.exists()) {
+            localPropertiesFile.inputStream().use { inputStream ->
+                localProperties.load(inputStream)
+            }
+        }
+
+        // Inject secret into BuildConfig
+        val cloudinarityApiKey = localProperties.getProperty("CLOUDINARY_API_KEY", "")
+        buildConfigField("String", "CLOUDINARY_API_KEY", "\"$cloudinarityApiKey\"")
+        val cloudinaritySecretKey = localProperties.getProperty("CLOUDINARY_API_SECRET", "")
+        buildConfigField("String", "CLOUDINARY_API_SECRET", "\"$cloudinaritySecretKey\"")
+
+
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -38,6 +57,7 @@ android {
     buildFeatures {
         viewBinding = true
         dataBinding = true
+        buildConfig = true
     }
 }
 
@@ -65,4 +85,14 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(platform(libs.firebase.bom))
+
+    // Glide for image loading and caching
+    implementation("com.github.bumptech.glide:glide:4.12.0")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
+
+    // Cloudinary Android SDK for uploading images
+    implementation("com.cloudinary:cloudinary-android:2.0.0")
+
+//    // (Optional) Kotlin coroutines for asynchronous work
+//    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0")
 }

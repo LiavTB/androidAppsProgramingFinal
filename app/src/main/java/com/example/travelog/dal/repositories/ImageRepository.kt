@@ -1,84 +1,60 @@
-//package com.example.travelog.dal.repositories
-//
-//import android.content.Context
-//import android.net.Uri
-//import androidx.core.net.toUri
-//import com.bumptech.glide.Glide
-//import com.example.travelog.dal.room.AppDatabase
-//import com.example.travelog.models.Image
-//import com.google.firebase.storage.FirebaseStorage
-//import kotlinx.coroutines.tasks.await
-//
-//class ImageRepository(private val context: Context, private val db: AppDatabase) {
-//    private val storage: FirebaseStorage = FirebaseStorage.getInstance()
-//
-//    companion object {
-//        const val IMAGES_REF = "images"
-//    }
-//
-//    suspend fun uploadImage(imageUri: Uri, imageId: String) {
-//        val imageRef = storage.reference.child("$IMAGES_REF/$imageId")
-//        imageRef.putFile(imageUri).await()
-//
-//        db.imageDao().insertAll(Image(imageId, imageUri.toString()))
-//    }
-//
-//    suspend fun getImageRemoteUri(imageId: String): Uri {
-//        val imageRef = storage.reference.child("$IMAGES_REF/$imageId")
-//
-//        return imageRef.downloadUrl.await()
-//    }
-//
-//    fun downloadAndCacheImage(uri: Uri, imageId: String): String {
-//        val file = Glide.with(context)
-//            .asFile()
-//            .load(uri)
-//            .submit()
-//            .get()
-//
-//        db.imageDao().insertAll(Image(imageId, file.absolutePath))
-//
-//        return file.absolutePath
-//    }
-//
-//    fun getImageLocalUri(imageId: String): String {
-//        return db.imageDao().getImageById(imageId).value?.uri ?: ""
-//    }
-//
-//    suspend fun getImagePathById(imageId: String): String {
-//        val image = db.imageDao().getImageById(imageId).value
-//
-//        if (image != null) return image.uri
-//
-//        val remoteUri = getImageRemoteUri(imageId)
-//        val localPath = downloadAndCacheImage(remoteUri, imageId)
-//
-//        db.imageDao().insertAll(Image(imageId, localPath))
-//
-//        return localPath
-//    }
-//
-//    suspend fun deleteImage(imageId: String) {
-//        val imageRef = storage.reference.child("$IMAGES_REF/$imageId")
-//        imageRef.delete().await()
-//
-//        deleteLocalImage(imageId)
-//    }
-//
-//    private fun deleteLocalImage(imageId: String) {
-//        val image = db.imageDao().getImageById(imageId).value
-//        image?.let {
-//            val file = Glide.with(context)
-//                .asFile()
-//                .load(it.uri)
-//                .submit()
-//                .get()
-//
-//            if (file.exists()) {
-//                file.delete()
-//            }
-//
-//            db.imageDao().deleteImage(imageId)
-//        }
-//    }
-//}
+package com.example.travelog.dal.repositories
+
+import android.content.Context
+import android.net.Uri
+import com.cloudinary.Cloudinary
+import com.cloudinary.utils.ObjectUtils
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import com.example.travelog.BuildConfig
+
+
+object ImageRepository {
+
+    // Cloudinary configuration (for unsigned upload, only cloud name and preset are needed)
+    private const val CLOUD_NAME = "dlx18pjmf"
+    private const val UPLOAD_PRESET = "your_upload_preset"
+    private const val BASE_URL = "https://res.cloudinary.com/$CLOUD_NAME/image/upload"
+
+    /**
+     * Builds the full URL for a given image publicId.
+     * @param publicId the identifier of the image (e.g. "sample.jpg" or "folder/sample")
+     * @param transformation optional transformation parameters, e.g. "w_300,h_300,c_fill"
+     */
+    fun getImageUrl(publicId: String, transformation: String? = null): String {
+        val transformationSegment = transformation?.let { "$it/" } ?: ""
+        return "$BASE_URL/$transformationSegment$publicId"
+    }
+
+    /**
+     * Uploads an image (from a Uri) to Cloudinary and returns the secure URL.
+     * This is a suspend function so it can be called from a coroutine.
+     *
+     * @param context Application context (needed to open the InputStream)
+     * @param imageUri Uri of the image to upload
+     * @return the secure URL of the uploaded image or null if upload fails
+     */
+    suspend fun uploadImage(context: Context, imageUri: Uri): String? = withContext(Dispatchers.IO) {
+        try {
+            // Prepare the Cloudinary configuration for unsigned upload
+            val config = mapOf(
+                "cloud_name" to "dlx18pjmf",
+            "api_key" to BuildConfig.CLOUDINARY_API_KEY,
+            "api_secret" to "MRVkC0klIe-G9sR3B7KvIsb_V70" // Click 'View API Keys' above to copy your API secret
+            )
+            val cloudinary = Cloudinary(config)
+
+            // Open an InputStream from the image Uri
+            context.contentResolver.openInputStream(imageUri)?.use { inputStream ->
+                // Upload the image. The options here ensure we treat the resource as an image.
+                val uploadResult = cloudinary.uploader().upload(inputStream, ObjectUtils.asMap("resource_type", "image"))
+                // Cloudinary returns a map containing, among others, the "secure_url"
+                return@withContext uploadResult["secure_url"] as? String
+            }
+            return@withContext null
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return@withContext null
+        }
+    }
+}
