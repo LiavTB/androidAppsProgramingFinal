@@ -25,6 +25,13 @@ class TripRepository(private val context: Context) {
         return trip
     }
 
+    suspend fun getAllTrips(): List<TripEntity> {
+        val snapshot = firestore.collection("trips").get().await()
+        val trips = snapshot.toObjects(TripEntity::class.java)
+        trips.forEach { db.tripDao().insertTrip(it) }
+        return trips
+    }
+
     suspend fun updateTrip(trip: TripEntity) {
         firestore.collection("trips").document(trip.id.toString()).set(trip).await()
         db.tripDao().updateTrip(trip)

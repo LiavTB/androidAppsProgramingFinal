@@ -8,9 +8,6 @@
             android:id="@+id/homeFragment"
             android:title="@string/menu_home"/>
         <item
-            android:id="@+id/searchFragment"
-            android:title="@string/menu_search"/>
-        <item
             android:id="@+id/addPostFragment"
             android:title="@string/menu_add_post"/>
         <item
