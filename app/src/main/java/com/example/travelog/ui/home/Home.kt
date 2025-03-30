@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.travelog.R
 import com.example.travelog.databinding.FragmentHomeBinding
 import com.example.travelog.ui.profile.TripAdapter
@@ -48,6 +49,15 @@ class HomeFragment : Fragment() {
         // Observe loading status to show/hide the ProgressBar.
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        }
+
+        // Setup SwipeRefreshLayout
+        val swipeRefresh = binding.swipeRefresh
+        swipeRefresh.setOnRefreshListener {
+            viewModel.refreshTrips()
+        }
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            swipeRefresh.isRefreshing = isLoading
         }
 
         return binding.root

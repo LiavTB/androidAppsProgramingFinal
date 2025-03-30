@@ -23,6 +23,10 @@ class HomeFeedViewModel(application: Application) : AndroidViewModel(application
         loadAllTrips()
     }
 
+    fun refreshTrips() {
+        loadAllTrips()
+    }
+
     private fun loadAllTrips() {
         _isLoading.value = true
         viewModelScope.launch {

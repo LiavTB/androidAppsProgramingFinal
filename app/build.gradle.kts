@@ -77,6 +77,7 @@ dependencies {
     implementation(libs.gson)
     implementation(libs.androidx.room.common)
     implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.swiperefreshlayout)
     kapt(libs.androidx.room.compiler) // Room annotation processor
 
     implementation(libs.firebase.firestore.ktx)

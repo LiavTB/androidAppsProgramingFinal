@@ -6,24 +6,30 @@
             type="com.example.travelog.ui.home.HomeFeedViewModel" />
     </data>
 
-    <FrameLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/backgroundColor">
+        android:layout_height="match_parent">
 
-        <!-- Trips list for Home Feed -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_home_trips"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:background="@color/backgroundColor">
 
-        <!-- ProgressBar overlay -->
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyleLarge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="gone" />
-    </FrameLayout>
+            <!-- Trips list for Home Feed -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_home_trips"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <!-- ProgressBar overlay -->
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone" />
+        </FrameLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </layout>
