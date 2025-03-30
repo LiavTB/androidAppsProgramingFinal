@@ -12,4 +12,9 @@ data class PostEntity(
     val description: String,
     val locationTag: List<String>,
     val date: Long       // Timestamp for post creation
-)
+) {
+    // No-argument constructor for Firestore
+    constructor() : this("", "", "", "", "", emptyList(), 0) {
+        // Empty constructor for Firestore
+    }
+}
