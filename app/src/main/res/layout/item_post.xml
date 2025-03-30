@@ -96,6 +96,15 @@
                 android:text="Edit"
                 android:visibility="gone"
                 android:layout_marginTop="8dp"/>
+
+            <!-- Delete Button: Visible only if the current user is the post owner -->
+            <Button
+                android:id="@+id/btn_delete_post"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Delete"
+                android:visibility="gone"
+                android:layout_marginTop="8dp"/>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </layout>

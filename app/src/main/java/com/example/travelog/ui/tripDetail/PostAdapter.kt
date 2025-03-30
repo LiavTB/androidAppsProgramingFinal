@@ -13,7 +13,8 @@ class PostAdapter(
     private var posts: List<PostEntity>,
     private var parentTripName: String,
     private var userData: UserEntity,
-    private val onEditPost: (PostEntity) -> Unit // New lambda for edit action
+    private val onEditPost: (PostEntity) -> Unit,
+    private val onDeletePost: (PostEntity) -> Unit
 ) : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
 
     inner class PostViewHolder(val binding: ItemPostBinding) : RecyclerView.ViewHolder(binding.root)
@@ -35,12 +36,15 @@ class PostAdapter(
         val currentUserId = FirebaseAuth.getInstance().currentUser?.uid
         // Enable the edit button only if the current user is the post's owner.
         if (post.userId == currentUserId) {
+            // Enable Edit button.
             holder.binding.btnEditPost.visibility = View.VISIBLE
-            holder.binding.btnEditPost.setOnClickListener {
-                onEditPost(post)
-            }
+            holder.binding.btnEditPost.setOnClickListener { onEditPost(post) }
+            // Enable Delete button.
+            holder.binding.btnDeletePost.visibility = View.VISIBLE
+            holder.binding.btnDeletePost.setOnClickListener { onDeletePost(post) }
         } else {
             holder.binding.btnEditPost.visibility = View.GONE
+            holder.binding.btnDeletePost.visibility = View.GONE
         }
     }
 

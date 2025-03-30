@@ -45,7 +45,11 @@ class TripDetailFragment : Fragment() {
                     putLong("date", post.date) // Passing the date field.
                 }
                 findNavController().navigate(R.id.action_tripDetail_to_postCreate, bundle)
+            },
+            onDeletePost = { post ->
+                viewModel.deletePost(post)
             }
+
         )
         binding.rvTripPosts.apply {
             layoutManager = LinearLayoutManager(requireContext())

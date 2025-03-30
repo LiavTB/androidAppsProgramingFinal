@@ -40,12 +40,28 @@ class TripDetailViewModel(application: Application) : AndroidViewModel(applicati
                 localTripId.value = it.id
 
                 val user = userRepo.getUser(it.userId)
-                userData.value = user!!
+                userData.value = user ?: UserEntity()
             }
             // Load posts for this trip.
             // If your PostRepository does not have a getPostsByTripId, you can filter from getAllPosts().
             val tripPosts = postRepo.getAllPostsByTrip(tripId)
             _posts.value = tripPosts
+        }
+    }
+
+    fun deletePost(post: PostEntity) {
+        viewModelScope.launch {
+            try {
+                // Call the repository to delete the post.
+                postRepo.deletePost(post)
+                // Reload the posts for the current trip.
+                localTripId.value?.let { tripId ->
+                    _posts.value = postRepo.getAllPostsByTrip(tripId)
+                }
+            } catch (e: Exception) {
+                // Optionally handle error, e.g. show a message.
+                e.printStackTrace()
+            }
         }
     }
 }
