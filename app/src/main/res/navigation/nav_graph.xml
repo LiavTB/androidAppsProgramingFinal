@@ -111,6 +111,26 @@
     </fragment>
 
     <fragment
+        android:id="@+id/tripViewFragment"
+        android:name="com.example.travelog.ui.trip.Trip"
+        android:label="Trip"
+        tools:layout="@layout/fragment_trip_view">
+<!--        <action-->
+<!--            android:id="@+id/action_editProfile_to_profile"-->
+<!--            app:destination="@id/profileFragment"/>-->
+    </fragment>
+
+    <fragment
+        android:id="@+id/tripDetailFragment"
+        android:name="com.example.travelog.ui.tripDetail.TripDetailFragment"
+        android:label="Trip"
+        tools:layout="@layout/fragment_trip_detail">
+                <action
+                    android:id="@+id/action_tripDetail_to_trip_create"
+                    app:destination="@id/addTripFragment"/>
+    </fragment>
+
+    <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.travelog.ui.profile.Profile"
         android:label="Profile"
@@ -124,6 +144,9 @@
         <action
             android:id="@+id/action_profile_to_addTrip"
             app:destination="@id/addTripFragment"/>
+        <action
+            android:id="@+id/action_profile_to_trip_detail"
+            app:destination="@id/tripDetailFragment"/>
 <!--        <action-->
 <!--            android:id="@+id/action_profile_to_home"-->
 <!--            app:destination="@id/homeFragment"/>-->

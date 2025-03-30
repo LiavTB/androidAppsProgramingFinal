@@ -24,4 +24,7 @@ interface PostDao {
 
     @Query("SELECT * FROM posts WHERE description LIKE :query OR locationTag LIKE :query")
     suspend fun searchPosts(query: String): List<PostEntity>
+
+    @Query("SELECT * FROM posts WHERE tripId = :tripId")
+    suspend fun getAllPostsByTrip(tripId: String): List<PostEntity>
 }

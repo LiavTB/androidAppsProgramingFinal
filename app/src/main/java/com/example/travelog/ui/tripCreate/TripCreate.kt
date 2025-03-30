@@ -29,6 +29,16 @@ class TripCreate : Fragment() {
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
+
+        // Retrieve the data from the bundle
+        arguments?.let {
+            viewModel.tripName.value = it.getString("tripName")
+            viewModel.tripDestination.value = it.getString("tripDestination")
+            viewModel.tripId.value = it.getString("tripId")
+            viewModel.tripStartDate.value = it.getString("tripDate")
+        }
+
+
         // Set up the create trip button click.
         binding.btnCreateTrip.setOnClickListener {
             viewModel.createTrip()

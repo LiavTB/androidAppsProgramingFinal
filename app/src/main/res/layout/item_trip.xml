@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="trip"
+            type="com.example.travelog.models.TripEntity" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+
+        android:backgroundTint="@color/cardBackgroundColor">
+
+        <LinearLayout
+            style="@style/PostCardContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Trip Name -->
+            <TextView
+                android:id="@+id/tv_trip_name"
+                style="@style/PostTitle"
+                android:layout_marginTop="8dp"
+                android:text="@{trip.name}" />
+
+            <!-- Trip Destination -->
+            <TextView
+                android:id="@+id/tv_trip_destination"
+                style="@style/PostLabel"
+                android:layout_marginTop="4dp"
+                android:text="@{trip.destination}" />
+
+            <!-- Trip Start Date -->
+            <TextView
+                android:id="@+id/tv_trip_start_date"
+                style="@style/PostLabel"
+                android:layout_marginTop="2dp"
+                android:text='@{String.valueOf(trip.startDate)}' />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</layout>

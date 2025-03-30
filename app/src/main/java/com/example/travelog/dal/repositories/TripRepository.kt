@@ -13,7 +13,7 @@ class TripRepository(private val context: Context) {
 
     private val db = AppDatabase.getDatabase(context)
 
-    suspend fun getTrip(tripId: Int): TripEntity? {
+    suspend fun getTrip(tripId: String): TripEntity? {
         var trip = db.tripDao().getTrip(tripId)
         if (trip == null) {
             val snapshot = firestore.collection("trips").document(tripId.toString()).get().await()
@@ -36,10 +36,18 @@ class TripRepository(private val context: Context) {
     }
 
     suspend fun addTrip(trip: TripEntity) {
-        // Save to Firestore
-        firestore.collection("trips").document(trip.id.toString()).set(trip).await()
-        // Cache in local Room database
-        db.tripDao().insertTrip(trip)
+        // Check if the trip already exists
+        val existingTrip = db.tripDao().getTrip(trip.id)
+        if (existingTrip != null) {
+            // Update the existing trip
+            firestore.collection("trips").document(trip.id.toString()).set(trip).await()
+            db.tripDao().updateTrip(trip)
+        } else {
+            // Save to Firestore
+            firestore.collection("trips").document(trip.id.toString()).set(trip).await()
+            // Cache in local Room database
+            db.tripDao().insertTrip(trip)
+        }
     }
 
     suspend fun getTripsByUserId(userId: String): List<TripEntity> {

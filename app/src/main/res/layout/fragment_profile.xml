@@ -2,7 +2,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
-        <!-- Declare the ProfileViewModel variable -->
         <variable
             name="viewModel"
             type="com.example.travelog.ui.profile.ProfileViewModel" />
@@ -12,16 +11,15 @@
         style="@style/PostPageContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center_horizontal">
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
 
-        <!-- Profile picture with a default image, overridden if profilePicture URL is available -->
+        <!-- Profile picture and name -->
         <ImageView
             android:id="@+id/iv_profile_picture"
             style="@style/ProfileImage"
-            android:src="@drawable/profile_placeholder"
             app:imageUrl="@{viewModel.profilePicture}" />
 
-        <!-- Profile name -->
         <TextView
             android:id="@+id/tv_profile_name"
             style="@style/ProfileName"
@@ -31,12 +29,14 @@
             style="@style/PostLabel"
             android:text="@string/my_trips" />
 
-        <GridLayout
-            android:id="@+id/gl_profile_trips"
-            style="@style/ProfileGrid"
-            android:columnCount="3" />
+        <!-- RecyclerView for listing trips -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_profile_trips"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp" />
 
-        <!-- Edit Profile button -->
+        <!-- Existing buttons -->
         <Button
             android:id="@+id/btn_edit_profile"
             style="@style/PostButtonPrimary"
@@ -49,12 +49,10 @@
             android:text="Add Trip"
             android:onClick="@{() -> viewModel.onAddTripClicked()}" />
 
-        <!-- Logout button -->
         <Button
             android:id="@+id/btn_logout"
             style="@style/PostButtonPrimary"
             android:text="Logout"
             android:onClick="@{() -> viewModel.onLogoutClicked()}" />
-
     </LinearLayout>
 </layout>

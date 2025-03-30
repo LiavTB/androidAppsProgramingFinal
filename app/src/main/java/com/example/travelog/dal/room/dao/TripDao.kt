@@ -20,7 +20,7 @@ interface TripDao {
     suspend fun deleteTrip(trip: TripEntity)
 
     @Query("SELECT * FROM trips WHERE id = :tripId")
-    suspend fun getTrip(tripId: Int): TripEntity?
+    suspend fun getTrip(tripId: String): TripEntity?
 
     @Query("SELECT * FROM trips WHERE name LIKE :query OR destination LIKE :query")
     suspend fun searchTrips(query: String): List<TripEntity>

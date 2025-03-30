@@ -30,6 +30,7 @@ class TripCreateViewModel(application: Application) : AndroidViewModel(applicati
     val tripStartDate = MutableLiveData(
         Time.formatEpochTime(_createTime)
     )
+    val tripId = MutableLiveData("")
 
     // LiveData for the creation state.
     val tripCreationState = MutableLiveData<TripCreationState>(TripCreationState.Idle)
@@ -58,9 +59,12 @@ class TripCreateViewModel(application: Application) : AndroidViewModel(applicati
                 isLoading.value = true
                 if (currentUserId.isNullOrBlank())
                     throw Exception("User not authenticated")
+
+                val tripIdToUse = if (tripId.value.isNullOrBlank()) UUID.randomUUID().toString() else tripId.value!!
+
                 // Create a new TripEntity with the user input
                 val trip = TripEntity(
-                    id = UUID.randomUUID().toString(),
+                    id = tripIdToUse,
                     name = tripName.value!!,
                     destination = tripDestination.value!!,
                     startDate = _createTime,

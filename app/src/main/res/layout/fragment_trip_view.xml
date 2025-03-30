@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.travelog.ui.trip.TripViewModel" />
+    </data>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            style="@style/PostPageContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                style="@style/PostTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Trip Details" />
+
+            <EditText
+                android:id="@+id/et_trip_name"
+                style="@style/PostEditTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@={viewModel.tripName}" />
+
+            <EditText
+                android:id="@+id/et_trip_destination"
+                style="@style/PostEditTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@={viewModel.tripDestination}" />
+
+            <TextView
+                android:id="@+id/tv_trip_start_date"
+                style="@style/PostLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.tripStartDate}" />
+
+            <Button
+                android:id="@+id/btn_update_trip"
+                style="@style/PostButtonPrimary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Update Trip"
+                android:layout_marginTop="24dp" />
+        </LinearLayout>
+    </ScrollView>
+</layout>

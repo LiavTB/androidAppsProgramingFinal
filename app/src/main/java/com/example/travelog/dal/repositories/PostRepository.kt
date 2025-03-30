@@ -41,4 +41,14 @@ class PostRepository(private val context: Context) {
         // Cache in local Room database
         db.postDao().insertPost(post)
     }
+
+    suspend fun getAllPostsByTrip(tripId: String): List<PostEntity> {
+        var posts = db.postDao().getAllPostsByTrip(tripId)
+        if (posts.isEmpty()) {
+            val snapshot = firestore.collection("posts").whereEqualTo("tripId", tripId).get().await()
+            posts = snapshot.toObjects(PostEntity::class.java)
+            posts.forEach { db.postDao().insertPost(it) }
+        }
+        return posts
+    }
 }
