@@ -29,8 +29,24 @@ class TripDetailFragment : Fragment() {
         val tripId = arguments?.getString("tripId")
         tripId?.let { viewModel.loadTripAndPosts(it) }
 
-        // Setup posts RecyclerView.
-        postAdapter = PostAdapter(emptyList(),viewModel.tripName.value ?: "", viewModel.userData.value ?: UserEntity())
+        // Setup posts RecyclerView with an edit lambda.
+        postAdapter = PostAdapter(
+            emptyList(),
+            viewModel.tripName.value ?: "",
+            viewModel.userData.value ?: UserEntity(),
+            onEditPost = { post ->
+                // Create a bundle with the post's data for editing, including the date.
+                val bundle = Bundle().apply {
+                    putString("postId", post.id)
+                    putString("description", post.description)
+                    putString("photo", post.photo)
+                    putStringArrayList("locationTags", ArrayList(post.locationTag))
+                    putString("tripId", post.tripId)
+                    putLong("date", post.date) // Passing the date field.
+                }
+                findNavController().navigate(R.id.action_tripDetail_to_postCreate, bundle)
+            }
+        )
         binding.rvTripPosts.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = postAdapter
@@ -43,12 +59,12 @@ class TripDetailFragment : Fragment() {
             postAdapter.updatePosts(posts, currentTripName, currUserData)
         }
 
-        // Show/hide the Edit button based on ownership.
+        // Show/hide the Edit Trip button based on ownership.
         viewModel.isOwner.observe(viewLifecycleOwner) { owner ->
             binding.btnDetailEditTrip.visibility = if (owner) View.VISIBLE else View.GONE
         }
 
-        // Edit button action.
+        // Edit Trip button action.
         binding.btnDetailEditTrip.setOnClickListener {
             val bundle = Bundle().apply {
                 putString("tripName", viewModel.tripName.value)

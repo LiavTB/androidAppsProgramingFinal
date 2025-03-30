@@ -13,7 +13,7 @@ import com.example.travelog.utils.Time
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 import java.util.UUID
-import com.example.travelog.dal.repositories.ImageRepository  // New import for Cloudinary
+import com.example.travelog.dal.repositories.ImageRepository
 import com.example.travelog.dal.services.NominationApi
 
 // Sealed class representing the publish post state.
@@ -28,7 +28,7 @@ class PostCreateViewModel(application: Application) : AndroidViewModel(applicati
 
     // Two-way bound properties for post inputs.
     val description = MutableLiveData("")
-    val selectedPhotoUri = MutableLiveData<String>("")
+    val selectedPhotoUri = MutableLiveData("")
 
     // For location tags: current query and selected tags.
     val locationQuery = MutableLiveData("")
@@ -53,6 +53,12 @@ class PostCreateViewModel(application: Application) : AndroidViewModel(applicati
     private val tripRepository: TripRepository = TripRepository(application)
     private val postRepository: PostRepository = PostRepository(application)
 
+    // Variable to hold the post if we are editing.
+    var editingPost: PostEntity? = null
+
+    // Store original date if available.
+    var originalDate: Long? = null
+
     init {
         loadUserTrips()
     }
@@ -62,8 +68,7 @@ class PostCreateViewModel(application: Application) : AndroidViewModel(applicati
         selectPhotoEvent.value = true
     }
 
-    // --- Updated: Called after a photo is selected.
-    // Now accepts a Uri and uses the CloudinaryRepository to upload the image.
+    // Called after a photo is selected.
     fun onPhotoSelected(imageUri: Uri) {
         viewModelScope.launch {
             val uploadedUrl = ImageRepository.uploadImage(getApplication(), imageUri)
@@ -73,7 +78,7 @@ class PostCreateViewModel(application: Application) : AndroidViewModel(applicati
         }
     }
 
-    // Fetch autocomplete suggestions from the Nominatim API.
+    // Fetch autocomplete suggestions from the Nomination API.
     fun fetchLocationSuggestions(query: String) {
         viewModelScope.launch {
             locationSuggestions.value = NominationApi.autoCompleteName(query)
@@ -102,11 +107,16 @@ class PostCreateViewModel(application: Application) : AndroidViewModel(applicati
         }
     }
 
-    // Method called when a trip is selected in the spinner.
-    fun onTripSelected(position: Int) {
-        if (position >= 0 && position < (userTrips.value?.size ?: 0)) {
-            selectedTripPosition.value = position
-            selectedTrip.value = userTrips.value?.get(position)
+    // Called when editing an existing post.
+    fun initForEdit(post: PostEntity) {
+        editingPost = post
+        description.value = post.description
+        selectedPhotoUri.value = post.photo
+        selectedLocationTags.value = post.locationTag.toMutableList()
+        originalDate = post.date  // Preserve the original date.
+        // Set selected trip based on the post's tripId.
+        userTrips.value?.find { it.id == post.tripId }?.let { trip ->
+            selectedTrip.value = trip
         }
     }
 
@@ -116,7 +126,7 @@ class PostCreateViewModel(application: Application) : AndroidViewModel(applicati
             isLoading.value = true
 
             if (description.value.isNullOrBlank() ||
-                selectedPhotoUri.value.isNullOrBlank() ||   // Now image is required
+                selectedPhotoUri.value.isNullOrBlank() ||
                 selectedLocationTags.value.isNullOrEmpty() ||
                 selectedTrip.value == null
             ) {
@@ -127,17 +137,31 @@ class PostCreateViewModel(application: Application) : AndroidViewModel(applicati
             publishState.value = PostPublishState.Loading
             viewModelScope.launch {
 
-                val post = PostEntity(
-                    id = UUID.randomUUID().toString(),
-                    description = description.value!!,
-                    photo = selectedPhotoUri.value!!,
-                    locationTag = selectedLocationTags.value!!.toList(),
-                    tripId = selectedTrip.value!!.id,
-                    userId = currentUserId!!,
-                    date = Time.getEpochTime()
-                )
-
-                postRepository.addPost(post)
+                if (editingPost == null) {
+                    // Create a new post.
+                    val post = PostEntity(
+                        id = UUID.randomUUID().toString(),
+                        description = description.value!!,
+                        photo = selectedPhotoUri.value!!,
+                        locationTag = selectedLocationTags.value!!.toList(),
+                        tripId = selectedTrip.value!!.id,
+                        userId = currentUserId!!,
+                        date = Time.getEpochTime()
+                    )
+                    postRepository.addPost(post)
+                } else {
+                    // Update the existing post.
+                    val updatedPost = PostEntity(
+                        id = editingPost!!.id,
+                        description = description.value!!,
+                        photo = selectedPhotoUri.value!!,
+                        locationTag = selectedLocationTags.value!!.toList(),
+                        tripId = selectedTrip.value!!.id,
+                        userId = currentUserId!!,
+                        date = originalDate ?: Time.getEpochTime() // Preserve original date if available.
+                    )
+                    postRepository.updatePost(updatedPost)
+                }
                 publishState.value = PostPublishState.Success
             }
         } catch (e: Exception) {

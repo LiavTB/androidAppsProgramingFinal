@@ -11,6 +11,7 @@ object Time {
         return System.currentTimeMillis()
     }
 
+    @JvmStatic
     fun formatEpochTime(epochTime: Long): String {
         return dateTimeFormat.format(Date(epochTime))
     }

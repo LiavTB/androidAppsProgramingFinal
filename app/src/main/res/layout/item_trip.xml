@@ -4,6 +4,7 @@
         <variable
             name="trip"
             type="com.example.travelog.models.TripEntity" />
+        <import type="com.example.travelog.utils.Time" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -39,7 +40,8 @@
                 android:id="@+id/tv_trip_start_date"
                 style="@style/PostLabel"
                 android:layout_marginTop="2dp"
-                android:text='@{String.valueOf(trip.startDate)}' />
+                android:text="@{Time.formatEpochTime(trip.startDate)}" />
+
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </layout>

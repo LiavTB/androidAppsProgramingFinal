@@ -107,6 +107,9 @@
                 <action
                     android:id="@+id/action_tripDetail_to_trip_create"
                     app:destination="@id/addTripFragment"/>
+        <action
+            android:id="@+id/action_tripDetail_to_postCreate"
+            app:destination="@id/addPostFragment"/>
     </fragment>
 
     <fragment

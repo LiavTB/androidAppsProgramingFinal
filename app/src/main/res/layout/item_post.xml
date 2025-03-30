@@ -18,16 +18,13 @@
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:background="@color/backgroundColor">
-<!--        android:cardCornerRadius="8dp"-->
-<!--        android:cardElevation="4dp">-->
 
         <LinearLayout
             style="@style/PostCardContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp"
-            >
+            android:padding="16dp">
 
             <!-- Post Header -->
             <LinearLayout
@@ -91,6 +88,14 @@
                 android:layout_marginTop="4dp"
                 android:text="@{post.locationTag.get(0)}"/>
 
+            <!-- Edit Button: Visible only if the current user is the post owner -->
+            <Button
+                android:id="@+id/btn_edit_post"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Edit"
+                android:visibility="gone"
+                android:layout_marginTop="8dp"/>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </layout>

@@ -27,14 +27,13 @@ class PostCreate : Fragment() {
 
     private val viewModel: PostCreateViewModel by viewModels()
 
-    // --- Added: Image picker launcher to select a photo.
+    // Image picker launcher to select a photo.
     private val imagePickerLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             val imageUri: Uri? = result.data?.data
             imageUri?.let {
-                // Trigger the image upload in the ViewModel.
                 viewModel.onPhotoSelected(it)
             }
         }
@@ -50,9 +49,24 @@ class PostCreate : Fragment() {
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-        // --- Setup the AutoCompleteTextView for location query ---
-        val actvLocation =
-            binding.root.findViewById<AutoCompleteTextView>(R.id.actv_location)
+        // Check for editing arguments.
+        arguments?.let {
+            if (it.containsKey("postId")) {
+                val post = com.example.travelog.models.PostEntity(
+                    id = it.getString("postId")!!,
+                    description = it.getString("description")!!,
+                    photo = it.getString("photo")!!,
+                    locationTag = it.getStringArrayList("locationTags")?.toList() ?: listOf(),
+                    tripId = it.getString("tripId")!!,
+                    userId = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.uid ?: "",
+                    date = it.getLong("date", com.example.travelog.utils.Time.getEpochTime())
+                )
+                viewModel.initForEdit(post)
+            }
+        }
+
+        // Setup the AutoCompleteTextView for location query.
+        val actvLocation = binding.root.findViewById<AutoCompleteTextView>(R.id.actv_location)
         val locationAdapter = ArrayAdapter(
             requireContext(),
             android.R.layout.simple_dropdown_item_1line,
@@ -77,10 +91,8 @@ class PostCreate : Fragment() {
             viewModel.locationQuery.value = selected
         }
 
-        // --- Setup the ChipGroup for selected location tags ---
         viewModel.selectedLocationTags.observe(viewLifecycleOwner, Observer { tags ->
-            val chipGroup =
-                binding.root.findViewById<com.google.android.material.chip.ChipGroup>(R.id.cg_location_tags)
+            val chipGroup = binding.root.findViewById<com.google.android.material.chip.ChipGroup>(R.id.cg_location_tags)
             chipGroup.removeAllViews()
             tags.forEach { tag ->
                 val chip = Chip(requireContext())
@@ -95,7 +107,6 @@ class PostCreate : Fragment() {
             }
         })
 
-        // --- Setup the Spinner for user trips ---
         val spinnerTrip = binding.root.findViewById<Spinner>(R.id.spinner_trip)
         val tripAdapter = ArrayAdapter<String>(
             requireContext(),
@@ -111,8 +122,7 @@ class PostCreate : Fragment() {
             }
             tripAdapter.notifyDataSetChanged()
         })
-        spinnerTrip.setOnItemSelectedListener(object :
-            android.widget.AdapterView.OnItemSelectedListener {
+        spinnerTrip.setOnItemSelectedListener(object : android.widget.AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: android.widget.AdapterView<*>?) {
                 viewModel.selectedTrip.value = null
             }
@@ -129,22 +139,19 @@ class PostCreate : Fragment() {
             }
         })
 
-        // --- Updated Photo selection observer ---
         viewModel.selectPhotoEvent.observe(viewLifecycleOwner, Observer { event ->
             if (event == true) {
-                // Launch the image picker intent to select a photo.
                 val intent = Intent(Intent.ACTION_PICK).apply { type = "image/*" }
                 imagePickerLauncher.launch(intent)
             }
         })
 
-        // --- Publish state observer ---
         viewModel.publishState.observe(viewLifecycleOwner, Observer { state ->
             when (state) {
                 is PostPublishState.Loading -> { }
                 is PostPublishState.Success -> {
                     Alert("Post", "Post published successfully", requireContext()).show()
-                    findNavController().navigate(R.id.action_postCreate_to_profile)
+                    findNavController().popBackStack()  // Return to the previous screen.
                 }
                 is PostPublishState.Error -> {
                     Alert("Error", state.message ?: "An error occurred", requireContext()).show()
