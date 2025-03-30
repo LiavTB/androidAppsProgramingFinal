@@ -5,10 +5,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.travelog.databinding.ItemPostBinding
 import com.example.travelog.models.PostEntity
+import com.example.travelog.models.UserEntity
 
 class PostAdapter(
     private var posts: List<PostEntity>,
     private var parentTripName: String,
+    private var userData: UserEntity,
 ) : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
 
     inner class PostViewHolder(val binding: ItemPostBinding) : RecyclerView.ViewHolder(binding.root)
@@ -23,14 +25,16 @@ class PostAdapter(
         val post = posts[position]
         holder.binding.post = post
         holder.binding.tripName = parentTripName
+        holder.binding.userData = userData
         holder.binding.executePendingBindings()
     }
 
     override fun getItemCount(): Int = posts.size
 
-    fun updatePosts(newPosts: List<PostEntity>, newParentTripName: String) {
+    fun updatePosts(newPosts: List<PostEntity>, newParentTripName: String, userDataa: UserEntity) {
         posts = newPosts
         parentTripName = newParentTripName
+        userData = userDataa
         notifyDataSetChanged()
     }
 }

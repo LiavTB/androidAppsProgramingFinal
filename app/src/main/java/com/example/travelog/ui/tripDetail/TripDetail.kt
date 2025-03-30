@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.navigation.fragment.findNavController
 import com.example.travelog.R
 import com.example.travelog.databinding.FragmentTripDetailBinding
+import com.example.travelog.models.UserEntity
 import com.example.travelog.utils.Time
 
 class TripDetailFragment : Fragment() {
@@ -29,7 +30,7 @@ class TripDetailFragment : Fragment() {
         tripId?.let { viewModel.loadTripAndPosts(it) }
 
         // Setup posts RecyclerView.
-        postAdapter = PostAdapter(emptyList(),viewModel.tripName.value ?: "")
+        postAdapter = PostAdapter(emptyList(),viewModel.tripName.value ?: "", viewModel.userData.value ?: UserEntity())
         binding.rvTripPosts.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = postAdapter
@@ -38,7 +39,8 @@ class TripDetailFragment : Fragment() {
         // Observe posts LiveData.
         viewModel.posts.observe(viewLifecycleOwner) { posts ->
             val currentTripName = viewModel.tripName.value ?: ""
-            postAdapter.updatePosts(posts, currentTripName)
+            val currUserData = viewModel.userData.value ?: UserEntity()
+            postAdapter.updatePosts(posts, currentTripName, currUserData)
         }
 
         // Show/hide the Edit button based on ownership.
