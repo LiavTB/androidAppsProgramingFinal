@@ -1,6 +1,7 @@
 package com.example.travelog.ui.profileEdit
 
 import android.app.Application
+import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,6 +10,7 @@ import com.example.travelog.dal.repositories.UserRepository
 import com.example.travelog.models.UserEntity
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
+import com.example.travelog.dal.repositories.ImageRepository  // Make sure this import is present
 
 // Sealed class representing the update state.
 sealed class ProfileUpdateState {
@@ -63,7 +65,6 @@ class ProfileEditViewModel(application: Application) : AndroidViewModel(applicat
                         userId = userId,
                         fullName = fullName.value ?: "",
                         profileImg = profilePicture.value ?: "",
-                        // Include other fields if needed (for example, email)
                         email = email.value ?: ""
                     )
                     // Update the user in Firebase, local cache, and Firebase Auth.
@@ -73,6 +74,14 @@ class ProfileEditViewModel(application: Application) : AndroidViewModel(applicat
                     updateState.value = ProfileUpdateState.Error(e.message)
                 }
             }
+        }
+    }
+
+    // New function to upload/update the profile image.
+    fun updateProfileImage(imageUri: Uri) {
+        viewModelScope.launch {
+            val resultUrl = ImageRepository.uploadImage(getApplication(), imageUri)
+            profilePicture.value = resultUrl
         }
     }
 }

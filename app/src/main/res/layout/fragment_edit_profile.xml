@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <!-- Declare the ProfileEditViewModel variable -->
         <variable
@@ -7,20 +8,23 @@
             type="com.example.travelog.ui.profileEdit.ProfileEditViewModel" />
     </data>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:background="@color/backgroundColor">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:background="@color/backgroundColor">
 
+        <!-- Added android:id attribute for image selection -->
         <ImageView
+            android:id="@+id/profileImageView"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:src="@drawable/profile_placeholder"
             android:layout_gravity="center"
             android:scaleType="centerCrop"
-            android:background="@drawable/circle_background" />
+            android:background="@drawable/circle_background"
+            app:imageUrl="@{viewModel.profilePicture}"/>
 
         <!-- Two-way binding on the full name field -->
         <EditText
@@ -36,15 +40,6 @@
             android:hint="@string/email"
             android:text="@={viewModel.email}" />
 
-<!--        TODO - allow password edit-->
-<!--        <EditText-->
-<!--            android:id="@+id/password"-->
-<!--            style="@style/EditTextStyle"-->
-<!--            android:hint="@string/password"-->
-<!--            android:inputType="textPassword"-->
-<!--            android:text="@={viewModel.password}" />-->
-
-
         <Button
             android:id="@+id/btn_save"
             android:layout_width="match_parent"
@@ -52,5 +47,5 @@
             android:text="@string/save"
             android:layout_marginTop="16dp" />
 
-        </LinearLayout>
+    </LinearLayout>
 </layout>
