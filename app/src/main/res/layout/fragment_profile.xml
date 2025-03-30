@@ -7,6 +7,9 @@
             type="com.example.travelog.ui.profile.ProfileViewModel" />
     </data>
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <LinearLayout
         style="@style/PostPageContainer"
         android:layout_width="match_parent"
@@ -55,4 +58,5 @@
             android:text="Logout"
             android:onClick="@{() -> viewModel.onLogoutClicked()}" />
     </LinearLayout>
+    </ScrollView>
 </layout>
