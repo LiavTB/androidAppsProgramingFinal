@@ -16,7 +16,8 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp">
+        android:layout_margin="8dp"
+        android:background="@color/backgroundColor">
 <!--        android:cardCornerRadius="8dp"-->
 <!--        android:cardElevation="4dp">-->
 
@@ -25,7 +26,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="16dp"
+            >
 
             <!-- Post Header -->
             <LinearLayout
